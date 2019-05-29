@@ -1,0 +1,88 @@
+.main
+{
+    margin : 50px;
+    height : 800px;
+    color: white;
+    text-decoration: bold;
+}
+.reset{
+    text-align : center;
+    padding: 5px;
+    margin-left: 10px;
+    text-emphasis: bold;
+    background: aqua;
+}
+.header{
+    border: 2px solid yellow;
+    width:100%;
+    height : 100px;
+    font-size: 25px;
+    padding-bottom: 20px;
+    text-align: center;
+    font-family: 'East Sea Dokdo', cursive;
+}
+body{
+    background:url('bg.jpg') no-repeat;
+    height : 1000px;
+    background-position: 50% 50%;
+    background-size: 1920px 1200px;
+}
+input {
+    padding: 10px;
+    border-color: rgb(227, 241, 224);
+} 
+div .login{
+    font-size: 20px;
+    margin : 20px;
+    margin-top: 100px;
+    margin-left: 80px;
+    padding : 20px;
+    float: left;
+    position: inherit;
+    font-family: 'Satisfy', cursive;
+}
+div .signup
+{
+    font-size: 20px;
+    margin : 20px;
+    padding : 30px;
+    float:left;
+    position: inherit;
+    margin-left : 100px;
+    font-family: 'Satisfy', cursive;
+}
+#requir{
+    color:red;
+    margin-left : 5px;
+}
+button{
+    text-align : center;
+    padding: 5px;
+    margin : 10px;
+    text-emphasis: bold;
+    margin-left : 130px;
+    background: aqua;
+
+}
+fieldset {
+    padding: 1em;
+    font:80%/1 sans-serif;
+    border : 3px solid black;
+    width : 500px;
+}
+label {
+    float:left;
+    width:25%;
+    margin-right:0.5em;
+    padding-top:0.5em;
+    text-align:right;
+    font-weight:bold;
+}
+legend {
+    padding: 0.2em 0.5em;
+    border:1px solid black;
+    color:white;
+    font-size:90%;
+    text-align:center;
+    font-size: 20px;
+}
