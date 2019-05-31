@@ -10,13 +10,19 @@
   },
   "dependencies": {
     "@hapi/hapi": "^18.3.1",
+    "ajv": "^6.10.0",
+    "ajv-errors": "^1.0.1",
     "async-redis": "^1.1.7",
     "axios": "^0.18.0",
     "boom": "^7.3.0",
     "joi": "^14.3.1",
+    "mini-toastr": "^0.8.1",
+    "node-cron": "^2.0.3",
     "pg-promise": "^8.7.2",
     "vue": "^2.3.3",
+    "vue-router": "^3.0.6",
     "vue-sidebar-menu": "^3.9.0",
+    "vue-survey-builder": "^0.2.0",
     "vuex": "^2.3.1"
   },
   "devDependencies": {
@@ -29,7 +35,7 @@
     "file-loader": "^0.9.0",
     "vue-loader": "^12.1.0",
     "vue-template-compiler": "^2.3.3",
-    "webpack": "^2.6.1",
+    "webpack": "^2.7.0",
     "webpack-dev-server": "^2.4.5"
   }
 }

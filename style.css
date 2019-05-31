@@ -1,9 +1,19 @@
-.main
-{
-    margin : 50px;
-    height : 800px;
-    color: white;
-    text-decoration: bold;
+.username{
+    background: white;
+    color : black;
+    padding: 10px;
+    font-size: 25px;
+    margin : 10px;
+    width : 350px; 
+}
+#Home{
+    display : none;
+}
+.user-display{
+    text-align : left;
+    margin-left : 20px;
+    float:left;
+    height : 1000px;
 }
 .reset{
     text-align : center;
@@ -14,68 +24,57 @@
 }
 .header{
     border: 2px solid yellow;
-    width:100%;
+    margin : 30px;
     height : 100px;
     font-size: 25px;
-    padding-bottom: 20px;
     text-align: center;
+    color : white;
+    padding-bottom: 30px;
     font-family: 'East Sea Dokdo', cursive;
 }
 body{
-    background:url('bg.jpg') no-repeat;
-    height : 1000px;
+    background:url('bg.svg') no-repeat;
     background-position: 50% 50%;
     background-size: 1920px 1200px;
+    background-attachment: fixed;
+    width : 100%;
+    height : 100%;
 }
 input {
     padding: 10px;
-    border-color: rgb(227, 241, 224);
-} 
-div .login{
+    text-align: center;
+}
+.login{
     font-size: 20px;
-    margin : 20px;
+    width : 600px;
     margin-top: 100px;
-    margin-left: 80px;
+    margin-left :   190px;
     padding : 20px;
-    float: left;
-    position: inherit;
+    float : right;
     font-family: 'Satisfy', cursive;
 }
-div .signup
-{
-    font-size: 20px;
-    margin : 20px;
-    padding : 30px;
-    float:left;
-    position: inherit;
-    margin-left : 100px;
-    font-family: 'Satisfy', cursive;
-}
+
 #requir{
     color:red;
     margin-left : 5px;
 }
-button{
-    text-align : center;
-    padding: 5px;
-    margin : 10px;
-    text-emphasis: bold;
-    margin-left : 130px;
-    background: aqua;
 
+button{
+    padding: 5px;
+    text-emphasis: bold;
+    background: aqua;
+    font-size :15px;
 }
-fieldset {
+/*fieldset {
     padding: 1em;
     font:80%/1 sans-serif;
     border : 3px solid black;
     width : 500px;
-}
+}*/
 label {
-    float:left;
-    width:25%;
+    margin-left : 100px;
     margin-right:0.5em;
-    padding-top:0.5em;
-    text-align:right;
+    text-align:center;
     font-weight:bold;
 }
 legend {

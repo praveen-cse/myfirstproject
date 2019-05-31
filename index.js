@@ -6,31 +6,9 @@ const pgp = require("pg-promise")(),
 dbConnection = require("./secrets/db_configuration"),
 db = pgp(dbConnection),
 redis = require("async-redis"),
-//amqp = require("amqplib/callback_api"),
 client = redis.createClient();
 const _ = require("lodash");
-/*async function recordActivity(fun,name,oldval,newval){
-    let promises=[];
-    let result=[];
-    var err;
-    let command =
-          "INSERT INTO history(operation,product_name,time_,oldval,newval) VALUES ($1,$2,$3,$4,$5)";
-    let values = [fun,name,Date(),oldval,newval];
-    //console.log(values);
-    promises.push(
-    await db
-        .any(command, values)
-        .then(data => {
-            result.push(values);
-        })
-        .catch(error => {err=error.detail;})
-    );
-    await Promise.all(promises);
-}*/
 const init = async () => {
-
-    var amount = 0;
-
     const server = Hapi.server({
         port: 3000, host: 'localhost', "routes": {
             "cors": {
@@ -147,7 +125,133 @@ const init = async () => {
             }
         }*/
     });
-    
+    server.route({
+        method: 'POST',
+        path: '/updateuser/{username}',
+        handler: async function (request, h) {
+            const payload = request.payload;
+            let promises=[];
+            let result=[];
+            let username=request.params.username;
+            let err="";
+            let command =
+                  "update user_details set fullname=$2,password=$3,phoneno=$4,email=$5 where username=$1";
+            let values = [username,payload.fullname,payload.password,payload.phoneno,payload.email];
+            promises.push(
+            db
+                .any(command, values)
+                .then(data => {
+                    result.push(values);
+                })
+                .catch(error => {err=error.detail;})
+            );
+            await Promise.all(promises);
+            return result;
+        },
+    });
+    server.route({
+        method: 'POST',
+        path: '/addquestion',
+        handler: async function (request, h) {
+            const payload = request.payload;
+            let promises=[];
+            let result=[];
+            let err="";
+            let command ="INSERT INTO question(question,questioner,hashtags) VALUES ($1,$2,$3)";
+            let values = [payload.ques,payload.questioner,payload.hashtags];
+            console.log(values);
+            promises.push(
+            db
+                .any(command, values)
+                .then(data => {
+                    result.push(values);
+                })
+                .catch(error => {console.log(error);})
+            );
+            await Promise.all(promises);
+            return result;
+        },
+        /*options: {
+            //auth: {strategy: 'my-strategy', mode: 'required'},
+            validate: {
+                payload: {
+                    username : Joi.any().required(),
+                    fullname: Joi.string().required(),
+                    password: Joi.any().required(),
+                    phoneno:Joi.number().max(10)
+                }
+            }
+        }*/
+    });
+    server.route({
+        method: 'GET',
+        path: '/getusercredentials/{username}',
+        handler: async function (request, h) {
+            var res=[];
+            let command = "select * from user_actions where username = $1";
+            let values=[request.params.username];
+            await db
+            .any(command,values)
+            .then(data => {
+                res = data;
+                })
+            .catch(error => console.log("ERROR:", error.detail));
+                return res;
+            }
+        }),
+        server.route({
+            method : 'GET',
+            path:'/getuserdetails/{username}',
+            handler: async function (request, h) {
+                var res=[];
+                let command = "select * from user_details where username = $1";
+                let values=[request.params.username];
+                console.log(values);
+                await db
+                .any(command,values)
+                .then(data => {
+                    res = data;
+                    })
+                .catch(error => console.log("ERROR:", error.detail));
+                    return res;
+                }
+        }),
+        server.route({
+            method : 'GET',
+            path : '/getanswer/{question}',
+            handler : async function (request,h){
+                var res=[];
+                let command = "select * from answer full join question on question.question_id=answer.question_id where question.questioner = $1 order by question.question_created";
+                let values=[request.params.question];
+                console.log(values);
+                await db
+                .any(command,values)
+                .then(data => {
+                    res = data;
+                    })
+                .catch(error => console.log("ERROR:", error.detail));
+                console.log(res);
+                    return res;
+                }  
+        }),
+        server.route({
+            method : 'GET',
+            path : '/getanswerbytag/{tag}',
+            handler : async function (request,h){
+                var res=[];
+                let command = "select *from question full join answer on question.question_id=answer.question_id where strpos(question.hashtags,$1) >0 or strpos(question.hashtags,$2) >0";
+                let values=[request.params.tag+',',','+request.params.tag];
+                console.log(values);
+                await db
+                .any(command,values)
+                .then(data => {
+                    res = data;
+                    })
+                .catch(error => console.log("ERROR:", error.detail));
+                console.log(res);
+                    return res;
+                }  
+        }),
     server.route({
         method: 'PUT',
         path: '/PUT',
