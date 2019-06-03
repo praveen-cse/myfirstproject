@@ -4,13 +4,13 @@
         <legend>Sign in</legend>
         <form id='log'>
           <br><br>
-          <label for='username'>Username : </label>
+          <label class="fas fa-user" for='username'></label>
           <input type='text' id='username' placeholder="Username" v-model="user.username" required> <span id='requir'>*</span><br/><br/><br/>
-          <label for='password'>Password : </label>
+          <label class="fas fa-lock fa-4" for='password'></label>
           <input type="password" id="password" placeholder='Password' v-model = "user.password" required> <span id='requir'>*</span><br/><br/><br/>
           <div class='mybutton'>
-          <button type='button' v-on:click='signin'>SIGN IN</button>
-          <button type='reset' value='Reset'>RESET</button>
+          <button class="fab fa-telegram" style='font-size:30px;' type='button' v-on:click='signin'></button><br/><br/>
+          <button class="fas fa-trash-restore" style='font-size:30px;'  type='reset' value='Reset'></button>
           </div>
         </form>
       </fieldset>
@@ -39,6 +39,7 @@ export default {
         window.alert('Please enter the credentionals properly');
         return;
       }
+      sessionStorage.setItem("username", a);
       console.log(a);
       api.get('/'+a+'/'+b)
       .then(res => {

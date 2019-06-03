@@ -32,15 +32,28 @@ export const store = new Vuex.Store({
             })
             api.get('/getusercredentials/'+payload)
             .then (res =>{
+                console.log(res);
                 store.user.favorites=res.data[0].favorites;
                 store.user.readlater=res.data[0].read_later;
                 store.user.credits=res.data[0].credits;
             })
+        },
+        addFav : (store,payload) => {
+            api.post('/addFav/'+store.user.username+'/'+payload);
+        },
+        addRead : (store,payload) => {
+            api.post('/addRead/'+store.user.username+'/'+payload);
         }
 },
     actions: {
         storedetails: (context,payload) => {
             context.commit('storedetails',payload);
+        },
+        addFav: (context,payload) => {
+            context.commit('addFav',payload);
+        },
+        addRead: (context,payload) => {
+            context.commit('addRead',payload);
         }
     }
 });

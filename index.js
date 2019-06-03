@@ -52,6 +52,83 @@ const init = async () => {
         }*/
     });
     server.route({
+        method : 'POST',
+        path: '/addAnswer',
+        handler : async function(req,h){
+            const payload=req.payload;
+            var res=[];
+            let command='insert into answer(author,question_id,answer) values($1,$2,$3)';
+            let values=[payload.author,payload.question_id,payload.answer]
+            await db
+            .any(command,values)
+            .then(data => {
+                res = data;
+                })
+            .catch(error => console.log("ERROR:", error.detail));
+            return res;
+        }
+    }),
+    server.route({
+        method : 'POST',
+        path :'/addFav/{name}/{id}',
+        handler: async function (req, h) {
+            var res=[]
+            let command = "select favorites from user_actions where username = $1";
+            let values=[req.params.name];
+            await db
+            .any(command,values)
+            .then(data => {
+                res = data;
+                })
+            .catch(error => console.log("ERROR:", error.detail));
+            res[0].favorites+=' '+req.params.id+' ';
+            let c="update user_actions set favorites=$1 where username=$2";
+            let v=[res[0].favorites,req.params.name];
+            console.log(v)
+            db
+            .any(c,v)
+            .then(data =>{
+                console.log(data);
+                return data;
+            })
+            .catch(error =>{
+                console.log('failure');
+                return error;
+            })
+            return res;
+        }
+    }),
+    server.route({
+        method : 'POST',
+        path :'/addRead/{name}/{id}',
+        handler: async function (req, h) {
+            var res=[]
+            let command = "select read_later from user_actions where username = $1";
+            let values=[req.params.name];
+            await db
+            .any(command,values)
+            .then(data => {
+                res = data;
+                })
+            .catch(error => console.log("ERROR:", error.detail));
+            res[0].read_later+=' '+req.params.id+' ';
+            let c="update user_actions set read_later=$1 where username=$2";
+            let v=[res[0].read_later,req.params.name];
+            console.log(v)
+            db
+            .any(c,v)
+            .then(data =>{
+                console.log(data);
+                return data;
+            })
+            .catch(error =>{
+                console.log('failure');
+                return error;
+            })
+            return res;
+        }
+    }),
+    server.route({
         method: 'POST',
         path: '/post',
         handler: async function (request, h) {
@@ -239,7 +316,7 @@ const init = async () => {
             path : '/getanswerbytag/{tag}',
             handler : async function (request,h){
                 var res=[];
-                let command = "select *from question full join answer on question.question_id=answer.question_id where strpos(question.hashtags,$1) >0 or strpos(question.hashtags,$2) >0";
+                let command = "select *,question.question_id from question full join answer on question.question_id=answer.question_id where strpos(question.hashtags,$1) >0 or strpos(question.hashtags,$2) >0";
                 let values=[request.params.tag+',',','+request.params.tag];
                 console.log(values);
                 await db
@@ -252,85 +329,22 @@ const init = async () => {
                     return res;
                 }  
         }),
-    server.route({
-        method: 'PUT',
-        path: '/PUT',
-        handler:async function (request, h) {
-            const payload = request.payload;
-            let promises=[];
-            let result=[];
-            var res=[]
-            let err;
-            let com = "select * from item where item_id = $1";
-            let val=[payload.item_id];
-            await db
-            .any(com,val)
-            .then(data => {
-                res = data;
+        server.route({
+            method : 'POST',
+            path : '/addcredit/{id}/{credit}',
+            handler : async function (request,h){
+                var res=[];
+                let command="update user_actions set credits=credits+$2 where username=$1";
+                let values=[request.params.id,request.params.credit];
+                await db
+                .any(command,values)
+                .then(data =>{
+                    res=data;
                 })
-            .catch(error => console.log("ERROR:", error.detail));
-                if(res.length == 0){
-                    return {
-                        "Err code" : "10002",
-                        "Err Msg" : "Product doesn't in the cart"
-                    };
-                }
-            let command ="update item set price = $3 where item_id=$1";
-            let values = [payload.item_id,payload.product_name,payload.price,payload.category];
-            promises.push(
-            db
-                .one(command, values)
-                .then(data => {
-                    result.push(values);
-                })
-                .catch(error => err=error.detail)
-            );
-            await Promise.all(promises);
-            recordActivity('PUT',payload.item_id,0,payload.price);
-            console.log(payload);
-            return payload;
-        },
-        options: {
-            auth: {strategy: 'my-strategy', mode: 'required'},
-            validate: {
-                payload: {
-                    item_id : Joi.number().required(),
-                    product_name: Joi.string().min(1).max(50).required(),
-                    price: Joi.number().required(),
-                    category:Joi.any().valid('TV','Mobile','Pen drive','Others').required()
-                }
+                .catch(error=>console.log('Error'+error));
+                return res;
             }
-        }
-    });
-    server.route({
-        method: 'DELETE',
-        path: '/DELETE/{id}',
-        handler: async function (request, h) {
-            let id = request.params.id;
-            var res=[];
-            let err="";
-            let command = "delete from item where item_id = $1";
-            await db
-            .any(command,id)
-            .then(data => {
-                res = data;
-                })
-            .catch(error => err=error.detail);
-            if (res.length==0 && err == "")
-            {
-                return {
-                    "Err code" : "10005",
-                    "Err Msg" : "Requested item is not in the cart"
-                };
-            }
-            recordActivity('DELETE',request.params.id,0,0);
-            console.log("Deleted successfully");
-            return "Deleted successfully";
-        },
-        options: {
-            auth: {strategy: 'my-strategy', mode: 'required'},
-        }
-    });
+        }),
     server.route({
             method: "GET",
             path: "/product-cache",

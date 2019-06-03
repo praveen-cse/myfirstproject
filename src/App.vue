@@ -30,7 +30,7 @@ export default {
 
 <style>
 body{
-    font-family: Ubuntu;
-    color : white;
+    font-family: Arial, Helvetica, sans-serif;
+    color : black;
 }
 </style>
